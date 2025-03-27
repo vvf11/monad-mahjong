@@ -19,8 +19,8 @@ const Title = styled.h1`
 `;
 
 const GameBoard = styled.div`
-  width: 800px;
-  height: 600px;
+  width: 1000px;
+  height: 800px;
   background-color: #2a2a2a;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -30,6 +30,7 @@ const GameBoard = styled.div`
   position: relative;
   overflow: hidden;
   perspective: 1000px;
+  margin: 20px;
 `;
 
 const StartButton = styled.button`
@@ -103,22 +104,74 @@ function App() {
 
     const layout = [];
     let index = 0;
-    
-    // Создаем пирамиду из 5 уровней
-    for (let z = 0; z < 5; z++) {
-      const layerSize = 6 - z; // Каждый следующий уровень меньше
-      for (let y = 0; y < layerSize; y++) {
-        for (let x = 0; x < layerSize; x++) {
-          if (index < numbers.length) {
-            layout.push({
-              id: index,
-              value: numbers[index],
-              x: 200 + x * 60 + z * 15, // Смещаем каждый уровень немного вправо
-              y: 100 + y * 80 + z * 15, // и вниз для эффекта 3D
-              z: z
-            });
-            index++;
-          }
+
+    // Создаем базовый слой (8x8)
+    const baseSize = 8;
+    for (let y = 0; y < baseSize; y++) {
+      for (let x = 0; x < baseSize; x++) {
+        if (index < numbers.length) {
+          layout.push({
+            id: index,
+            value: numbers[index],
+            x: 100 + x * 60,
+            y: 50 + y * 80,
+            z: 0
+          });
+          index++;
+        }
+      }
+    }
+
+    // Добавляем второй слой (6x6)
+    const secondLayerSize = 6;
+    const secondLayerOffset = 1; // Смещение от края на 1 плитку
+    for (let y = 0; y < secondLayerSize; y++) {
+      for (let x = 0; x < secondLayerSize; x++) {
+        if (index < numbers.length) {
+          layout.push({
+            id: index,
+            value: numbers[index],
+            x: 100 + (secondLayerOffset + x) * 60 + 15,
+            y: 50 + (secondLayerOffset + y) * 80 + 15,
+            z: 1
+          });
+          index++;
+        }
+      }
+    }
+
+    // Добавляем третий слой (4x4)
+    const thirdLayerSize = 4;
+    const thirdLayerOffset = 2; // Смещение от края на 2 плитки
+    for (let y = 0; y < thirdLayerSize; y++) {
+      for (let x = 0; x < thirdLayerSize; x++) {
+        if (index < numbers.length) {
+          layout.push({
+            id: index,
+            value: numbers[index],
+            x: 100 + (thirdLayerOffset + x) * 60 + 30,
+            y: 50 + (thirdLayerOffset + y) * 80 + 30,
+            z: 2
+          });
+          index++;
+        }
+      }
+    }
+
+    // Добавляем верхний слой (2x2)
+    const topLayerSize = 2;
+    const topLayerOffset = 3; // Смещение от края на 3 плитки
+    for (let y = 0; y < topLayerSize; y++) {
+      for (let x = 0; x < topLayerSize; x++) {
+        if (index < numbers.length) {
+          layout.push({
+            id: index,
+            value: numbers[index],
+            x: 100 + (topLayerOffset + x) * 60 + 45,
+            y: 50 + (topLayerOffset + y) * 80 + 45,
+            z: 3
+          });
+          index++;
         }
       }
     }
