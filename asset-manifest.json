@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/monad-mahjong/static/js/main.e94c1af6.js",
+    "index.html": "/monad-mahjong/index.html",
+    "main.e94c1af6.js.map": "/monad-mahjong/static/js/main.e94c1af6.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.e94c1af6.js"
+  ]
+}
