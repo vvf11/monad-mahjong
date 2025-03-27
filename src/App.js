@@ -32,6 +32,36 @@ const GameBoard = styled.div`
   perspective: 1000px;
 `;
 
+const StartButton = styled.button`
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const ScoreDisplay = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [tiles, setTiles] = useState([]);
