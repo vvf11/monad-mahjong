@@ -20,19 +20,13 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Create package.json if not exists
-        run: |
-          if [ ! -f package.json ]; then
-            echo '{"name":"monad-mahjong","version":"0.1.0","private":true,"dependencies":{"react":"^18.2.0","react-dom":"^18.2.0","react-scripts":"5.0.1","styled-components":"^6.1.8"},"scripts":{"start":"react-scripts start","build":"react-scripts build","test":"react-scripts test","eject":"react-scripts eject"}}' > package.json
-          fi
-
       - name: Install dependencies
         run: |
-          npm install --legacy-peer-deps
-          npm install -g serve
+          npm install
+          npm install react-scripts --save
 
       - name: Build
-        run: npm run build
+        run: CI=false npm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
