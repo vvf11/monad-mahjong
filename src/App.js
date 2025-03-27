@@ -28,9 +28,17 @@ const GameBoard = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   perspective: 1000px;
   margin: 20px;
+  transform-style: preserve-3d;
+`;
+
+const TilesContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
 `;
 
 const StartButton = styled.button`
@@ -113,8 +121,8 @@ function App() {
           layout.push({
             id: index,
             value: numbers[index],
-            x: 100 + x * 60,
-            y: 50 + y * 80,
+            x: 200 + x * 65,
+            y: 100 + y * 85,
             z: 0
           });
           index++;
@@ -124,15 +132,15 @@ function App() {
 
     // Добавляем второй слой (6x6)
     const secondLayerSize = 6;
-    const secondLayerOffset = 1; // Смещение от края на 1 плитку
+    const secondLayerOffset = 1;
     for (let y = 0; y < secondLayerSize; y++) {
       for (let x = 0; x < secondLayerSize; x++) {
         if (index < numbers.length) {
           layout.push({
             id: index,
             value: numbers[index],
-            x: 100 + (secondLayerOffset + x) * 60 + 15,
-            y: 50 + (secondLayerOffset + y) * 80 + 15,
+            x: 200 + (secondLayerOffset + x) * 65 + 20,
+            y: 100 + (secondLayerOffset + y) * 85 + 20,
             z: 1
           });
           index++;
@@ -142,15 +150,15 @@ function App() {
 
     // Добавляем третий слой (4x4)
     const thirdLayerSize = 4;
-    const thirdLayerOffset = 2; // Смещение от края на 2 плитки
+    const thirdLayerOffset = 2;
     for (let y = 0; y < thirdLayerSize; y++) {
       for (let x = 0; x < thirdLayerSize; x++) {
         if (index < numbers.length) {
           layout.push({
             id: index,
             value: numbers[index],
-            x: 100 + (thirdLayerOffset + x) * 60 + 30,
-            y: 50 + (thirdLayerOffset + y) * 80 + 30,
+            x: 200 + (thirdLayerOffset + x) * 65 + 40,
+            y: 100 + (thirdLayerOffset + y) * 85 + 40,
             z: 2
           });
           index++;
@@ -160,15 +168,15 @@ function App() {
 
     // Добавляем верхний слой (2x2)
     const topLayerSize = 2;
-    const topLayerOffset = 3; // Смещение от края на 3 плитки
+    const topLayerOffset = 3;
     for (let y = 0; y < topLayerSize; y++) {
       for (let x = 0; x < topLayerSize; x++) {
         if (index < numbers.length) {
           layout.push({
             id: index,
             value: numbers[index],
-            x: 100 + (topLayerOffset + x) * 60 + 45,
-            y: 50 + (topLayerOffset + y) * 80 + 45,
+            x: 200 + (topLayerOffset + x) * 65 + 60,
+            y: 100 + (topLayerOffset + y) * 85 + 60,
             z: 3
           });
           index++;
@@ -214,18 +222,20 @@ function App() {
         ) : (
           <>
             <ScoreDisplay>Очки: {score}</ScoreDisplay>
-            {tiles.map(tile => (
-              <Tile
-                key={tile.id}
-                value={tile.value}
-                x={tile.x}
-                y={tile.y}
-                z={tile.z}
-                isSelected={selectedTile?.id === tile.id}
-                isBlocked={isBlockedByOthers(tile, tiles)}
-                onClick={() => handleTileClick(tile)}
-              />
-            ))}
+            <TilesContainer>
+              {tiles.map(tile => (
+                <Tile
+                  key={tile.id}
+                  value={tile.value}
+                  x={tile.x}
+                  y={tile.y}
+                  z={tile.z}
+                  isSelected={selectedTile?.id === tile.id}
+                  isBlocked={isBlockedByOthers(tile, tiles)}
+                  onClick={() => handleTileClick(tile)}
+                />
+              ))}
+            </TilesContainer>
           </>
         )}
       </GameBoard>

@@ -28,6 +28,8 @@ const TileContainer = styled.div`
     ${props.isBlocked ? 'translateY(0)' : ''}`};
   opacity: ${props => props.isBlocked ? 0.6 : 1};
   border: 1px solid #ccc;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 
   &:before {
     content: '';
@@ -39,6 +41,7 @@ const TileContainer = styled.div`
     border: 1px solid #ddd;
     border-radius: 2px;
     pointer-events: none;
+    transform: translateZ(1px);
   }
 
   &:hover {
@@ -58,6 +61,7 @@ const TileContainer = styled.div`
     background: ${props => props.isBlocked ? 'rgba(0, 0, 0, 0.2)' : 'none'};
     border-radius: 4px;
     pointer-events: none;
+    transform: translateZ(2px);
   }
 `;
 
@@ -68,6 +72,7 @@ const TileValue = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  transform-style: preserve-3d;
   
   &:before {
     content: '';
@@ -79,12 +84,14 @@ const TileValue = styled.div`
     border: 1px solid #e8e8e8;
     border-radius: 2px;
     opacity: 0.5;
+    transform: translateZ(1px);
   }
 `;
 
 const Tile = ({ value, x, y, z, isSelected, isBlocked, onClick }) => {
   return (
     <TileContainer
+      className="tile-container"
       x={x}
       y={y}
       z={z}
