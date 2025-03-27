@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import Tile from './components/Tile';
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -27,6 +28,7 @@ const GameBoard = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
 `;
 
 const StartButton = styled.button`
@@ -45,12 +47,86 @@ const StartButton = styled.button`
   }
 `;
 
+const ScoreDisplay = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #ffffff;
+`;
+
 function App() {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [tiles, setTiles] = useState([]);
+  const [selectedTile, setSelectedTile] = useState(null);
+  const [score, setScore] = useState(0);
+
+  const generateTiles = () => {
+    const numbers = [];
+    // Создаем пары чисел от 1 до 9
+    for (let i = 1; i <= 9; i++) {
+      for (let j = 0; j < 4; j++) {
+        numbers.push(i);
+      }
+    }
+    
+    // Перемешиваем числа
+    for (let i = numbers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    }
+
+    // Создаем плитки с позициями
+    return numbers.map((number, index) => ({
+      id: index,
+      value: number,
+      x: 100 + (index % 8) * 80,
+      y: 100 + Math.floor(index / 8) * 100
+    }));
+  };
+
+  const handleStartGame = () => {
+    setTiles(generateTiles());
+    setGameStarted(true);
+    setScore(0);
+  };
+
+  const handleTileClick = (tile) => {
+    if (!selectedTile) {
+      setSelectedTile(tile);
+    } else {
+      if (selectedTile.id !== tile.id) {
+        if (selectedTile.value === tile.value) {
+          // Убираем совпавшие плитки
+          setTiles(tiles.filter(t => t.id !== tile.id && t.id !== selectedTile.id));
+          setScore(score + 10);
+        }
+        setSelectedTile(null);
+      }
+    }
+  };
+
   return (
     <AppContainer>
       <Title>Monad Mahjong</Title>
       <GameBoard>
-        <StartButton>Начать игру</StartButton>
+        {!gameStarted ? (
+          <StartButton onClick={handleStartGame}>Начать игру</StartButton>
+        ) : (
+          <>
+            <ScoreDisplay>Очки: {score}</ScoreDisplay>
+            {tiles.map(tile => (
+              <Tile
+                key={tile.id}
+                value={tile.value}
+                x={tile.x}
+                y={tile.y}
+                isSelected={selectedTile?.id === tile.id}
+                onClick={() => handleTileClick(tile)}
+              />
+            ))}
+          </>
+        )}
       </GameBoard>
     </AppContainer>
   );
