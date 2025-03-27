@@ -29,30 +29,7 @@ const GameBoard = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden;
-`;
-
-const StartButton = styled.button`
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
-  }
-`;
-
-const ScoreDisplay = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 1.5rem;
-  color: #ffffff;
+  perspective: 1000px;
 `;
 
 function App() {
@@ -60,6 +37,24 @@ function App() {
   const [tiles, setTiles] = useState([]);
   const [selectedTile, setSelectedTile] = useState(null);
   const [score, setScore] = useState(0);
+
+  const isBlockedByOthers = (tile, allTiles) => {
+    // Проверяем, есть ли плитки над данной
+    const hasUpperTile = allTiles.some(t => 
+      t.z > tile.z && 
+      Math.abs(t.x - tile.x) < 60 && 
+      Math.abs(t.y - tile.y) < 80
+    );
+
+    // Проверяем, заблокирована ли плитка слева и справа
+    const isBlockedSides = allTiles.some(t =>
+      t.z === tile.z &&
+      t.y === tile.y &&
+      ((t.x === tile.x + 60) || (t.x === tile.x - 60))
+    );
+
+    return hasUpperTile || (isBlockedSides && tile.z === 0);
+  };
 
   const generateTiles = () => {
     const numbers = [];
@@ -76,13 +71,29 @@ function App() {
       [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
     }
 
-    // Создаем плитки с позициями
-    return numbers.map((number, index) => ({
-      id: index,
-      value: number,
-      x: 100 + (index % 8) * 80,
-      y: 100 + Math.floor(index / 8) * 100
-    }));
+    const layout = [];
+    let index = 0;
+    
+    // Создаем пирамиду из 5 уровней
+    for (let z = 0; z < 5; z++) {
+      const layerSize = 6 - z; // Каждый следующий уровень меньше
+      for (let y = 0; y < layerSize; y++) {
+        for (let x = 0; x < layerSize; x++) {
+          if (index < numbers.length) {
+            layout.push({
+              id: index,
+              value: numbers[index],
+              x: 200 + x * 60 + z * 15, // Смещаем каждый уровень немного вправо
+              y: 100 + y * 80 + z * 15, // и вниз для эффекта 3D
+              z: z
+            });
+            index++;
+          }
+        }
+      }
+    }
+
+    return layout;
   };
 
   const handleStartGame = () => {
@@ -92,11 +103,16 @@ function App() {
   };
 
   const handleTileClick = (tile) => {
+    // Проверяем, не заблокирована ли плитка
+    if (isBlockedByOthers(tile, tiles)) {
+      return;
+    }
+
     if (!selectedTile) {
       setSelectedTile(tile);
     } else {
       if (selectedTile.id !== tile.id) {
-        if (selectedTile.value === tile.value) {
+        if (selectedTile.value === tile.value && !isBlockedByOthers(selectedTile, tiles)) {
           // Убираем совпавшие плитки
           setTiles(tiles.filter(t => t.id !== tile.id && t.id !== selectedTile.id));
           setScore(score + 10);
@@ -108,7 +124,7 @@ function App() {
 
   return (
     <AppContainer>
-      <Title>Monad Mahjong</Title>
+      <Title>Пасьянс Маджонг</Title>
       <GameBoard>
         {!gameStarted ? (
           <StartButton onClick={handleStartGame}>Начать игру</StartButton>
@@ -121,7 +137,9 @@ function App() {
                 value={tile.value}
                 x={tile.x}
                 y={tile.y}
+                z={tile.z}
                 isSelected={selectedTile?.id === tile.id}
+                isBlocked={isBlockedByOthers(tile, tiles)}
                 onClick={() => handleTileClick(tile)}
               />
             ))}
@@ -132,4 +150,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
