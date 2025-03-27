@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/monad-mahjong/static/css/main.bfd2d107.css",
-    "main.js": "/monad-mahjong/static/js/main.22fa6e3a.js",
+    "main.js": "/monad-mahjong/static/js/main.ea40a9fe.js",
     "index.html": "/monad-mahjong/index.html",
     "main.bfd2d107.css.map": "/monad-mahjong/static/css/main.bfd2d107.css.map",
-    "main.22fa6e3a.js.map": "/monad-mahjong/static/js/main.22fa6e3a.js.map"
+    "main.ea40a9fe.js.map": "/monad-mahjong/static/js/main.ea40a9fe.js.map"
   },
   "entrypoints": [
     "static/css/main.bfd2d107.css",
-    "static/js/main.22fa6e3a.js"
+    "static/js/main.ea40a9fe.js"
   ]
 }
